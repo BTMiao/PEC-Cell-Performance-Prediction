@@ -1,0 +1,11 @@
+&include = TemplateSLJ.txt
+
+sys.Vmin = 0.0
+sys.Vmax = 2.3
+sc.ND = 1e17*(100^3)
+sys.dV = 25e-3/4
+
+sys.I0 = 6.2063e16*(100^2)
+sc.tau = 1.000000e-08
+inter.kp0 = 1.000000e+06
+

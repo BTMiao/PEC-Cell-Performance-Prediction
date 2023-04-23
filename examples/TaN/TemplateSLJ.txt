@@ -1,0 +1,30 @@
+sys.I0 = 1.0*6.2063e16*(100^2)/1
+sys.T = 300                                 
+sys.Vbi = 0.25
+sys.Vmin = 0.3
+sys.Vmax = 0.8
+sys.dV = 0.025
+
+sys.beta = pi/100
+sys.beta_phi = pi/30
+sys.Ngum = 200
+sys.ct = 1e-4
+
+sc.Nc = 1.1107e+26
+sc.Nv = 1.6816e+26
+
+sc.Eg = 2.2                             
+sc.epsr = 17
+sc.alpha = 3.4e5/0.01
+sc.ND = 1e17*(100^3)
+sc.p_o = (sc.ni^2)/sc.ND
+sc.tau = 1e-8*1e0
+sc.B = 1/(sc.ND*sc.tau)
+sc.ratio_n = 0.99
+sc.carrier_max = 1/(0.27144e-9^3)
+
+inter.kp0 = 10*1e0
+inter.Lint = 1e-9
+inter.Wp = 2.5e-9
+inter.Lscreening = 10e-9
+

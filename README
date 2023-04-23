@@ -1,0 +1,87 @@
+% ========================================================================================================== %
+% This software was written in 2022 by                                                                       %
+% Kirk H. Bevan <kirk.bevan@mcgill.ca>, Botong Miao, and Asif Iqbal ("the authors").                         %
+%                                                                                                            %
+% LICENCE                                                                                                    %
+% Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License.                    %
+% This software is distributed without any warranty.                                                         %
+% You should have received a copy of the Creative Commons Attribution-NonCommercial-ShareAlike 4.0           %
+% International Public License along with this software.                                                     %
+% If not, see <https://creativecommons.org/licenses/by-nc-sa/4.0/>.                                          %
+%                                                                                                            %
+% DISCLAIMER                                                                                                 %
+% The authors and publishers make no warranties about the software, and disclaim liability for all uses of   %
+% the software, to the fullest extent permitted by applicable law.  The authors do not recommend use of this %
+% software for any purpose.  It is made freely available, solely to clarify points made in their analysis of %
+% photoelectrochemical (PEC) devices.  When using or citing the software, you should not imply endorsement   %
+% by the authors.                                                                                            %
+%                                                                                                            %
+% DESCRIPTION                                                                                                %
+% o SLJCompact is a Matlab based program that computes the band diagram and current-voltage characteristics  %
+%   of semiconductor photoanodes.  To enable rapid insights, corresponding to various semiconductor-liquid   %
+%   junction (SLJ) properties and observable current-voltage characteristics, an abridged set of semi-       %
+%   analytical conservation equations are employed in the semiconductor region coupled with Gouy-Chapman     %
+%   screening within the liquid region.  Electrostatic interactions between these regions across the         %
+%   junction are solved self-consistently through a variation on the Scharfetter-Gummel method.   In this    %
+%   manner, the model is able to provide key band diagram insights regarding the correlated operation of     %
+%   photoanodes, both under illumination and in the dark, with respect to: current-voltage trends,           %
+%   quasi-Fermi level splitting, hole transfer rates, electron transfer rates, depletion region screening,   %
+%   hole inversion screening, and carrier recombination lifetimes.  Motivated by Kroemer's lemma, SLJCompact %
+%   is intended to further the adoption of band diagram methods within the photoelectrochemical device       % 
+%   literature, by providing a computationally inexpensive approach residing between computationally         %
+%   intensive full continuity equation solvers and more approximate analytical expressions.                  %
+% o Documentation for an example run is provided after this preamble.                                        %
+%                                                                                                            %
+% Primary Reference                                                                                          %
+%   1. Kirk H. Bevan, Botong Miao, and  Asif Iqbal, "SLJCompact: A Self-Consistent Photoelectrochemical      %
+%      Solver for Rapid Band Diagram Insights" (2022).                                                       %
+%                                                                                                            %
+% Closely Related References                                                                                 %
+%    2.  K. Li, B. Miao, W. Fa, R. Chen, J. Jin, K. H. Bevan and D. Wang, “Evolution of Surface Oxidation on %
+%        Ta3N5 as Probed by a Photoelectrochemical Method”, ACS Appl. Mater. Interfaces 13, 17420 (2021).    %
+%    3.  B. Miao, K. Sangare, A. Iqbal, B. Marsan, and K. H. Bevan, “Interpreting interfacial                %
+%        semiconductor-liquid capacitive characteristics impacted by surface states: a theoretical and       %
+%        experimental study of CuGaS2”, Phys. Chem. Chem. Phys, 22, 19631 (2020).                            %
+%    4.  B. Miao, A. Iqbal, and K. H. Bevan, "Utilizing Band Diagrams to Interpret the Photovoltage and      %
+%        Photocurrent in Photoanodes: A Semiclassical Device Modeling Study", J. Phys. Chem. C 123, 28593    %
+%        (2019).                                                                                             %
+%    5.  A. Iqbal, S. Yuan, Z. Wang, and K. H. Bevan "The Impact of Bulk Trapping Phenomena on the Maximum   %
+%        Attainable Photovoltage of Semiconductor-Liquid Interfaces”, J. Phys. Chem. C 122, 23878 (2018).    %
+%    6.  A. Iqbal and K. H. Bevan “The impact of boundary conditions on calculated photovoltages and         %
+%        photocurrents at photocatalytic interfaces”, MRS Communications 8, 466 (2018).                      %
+%    7.  A. Iqbal and K. H. Bevan, "On Simultaneously Solving the Photovoltage and Photocurrent at           %
+%        Semiconductor-Liquid Interfaces”, J. Phys. Chem. C 122, 30 (2018).                                  %
+%    8.  A. Iqbal, Md. S. Hossain and K. H. Bevan, "The role of relative rate constants in determining       %
+%        surface state phenomena at semiconductor–liquid interfaces", Phys. Chem. Chem. Phys. 18, 29466      %
+%        (2016).                                                                                             %
+%                                                                                                            %
+% ========================================================================================================== %
+
+% ========================================================================================================== %
+% Within the main downloaded folder tree, associated with the software package, there are two subfolders and %
+% one Matlab file: 'source/', 'examples/', and 'AddSLJPaths.m'.  First one enters the central directory      %
+% containing these folders/files and executes                                                                %
+%   >> AddSLJPaths;                                                                                          %
+% within the Matlab command prompt.  Next for the sake of this example one can then enter the subdirectory   %
+%   >> cd examples/TaN/                                                                                      %
+% which takes us to a set of examples which only vary in terms of the hole transfer and recombination        %
+% parameter settings as given by inter.kp0 and sc.tau in Table 1 of the above primary reference.  As a first %
+% illustrative example, let us execute the two below runs within the Matlab command line via                 %
+%   >> SLJCompactModel('Light_kp1_tau-8.txt');                                                               %
+%   >> SLJCompactModel('Dark_kp1.txt');                                                                      %
+% that typically takes a serveral minutes or so to run on a modern laptop.  All parameter settings for these %
+% examples are provided in the Supplemental Material. For these two particular runs, the main parameters of  %
+% interest are the hole transfer rate constant and carrier lifetime, set at 10/s and 10e-8 s, respectively   %
+% The results of these two runs can be viewed by executing the provided plotting script in the manner of     %
+%   >> PlotSLJCompactFigures;                                                                                %
+% which outputs all of the results needed to generate the data provided in the primary reference above.      %
+% This plotting script can be adapted or extended for other investigations the user may wish to undertake.   %
+% The main scope of this script, and the results it provides, are discussed at length in the above primary   %
+% reference.                                                                                                 %
+%                                                                                                            %
+% Send any bug reports to: kirk.bevan@mcgill.ca                                                              %
+% Much appreciated!                                                                                          %
+% ========================================================================================================== %
+
+
+
